@@ -1,5 +1,4 @@
 import time
-
 start_time = time.time()
 
 f = open('names_1.txt', 'r')
@@ -12,13 +11,53 @@ f.close()
 
 duplicates = []  # Return the list of duplicates in this data structure
 
+class BSTNode:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+    def insert(self, value):
+        if value < self.value:
+            if not self.left: 
+                self.left = BSTNode(value)
+            else:
+                self.left.insert(value)
+        else:
+            if not self.right:
+                self.right = BSTNode(value)
+            else:
+                self.right.insert(value)
+
+    def contains(self, target):
+        if target == self.value:
+            return True
+        if target < self.value:
+            # go left if left is a BSTNode
+            if not self.left:
+                return False
+            return self.left.contains(target)
+        else:
+            # go right if right is a BSTNode
+            if not self.right:
+                return False
+            return self.right.contains(target)
+
+
 # Replace the nested for loops below with your improvements
+bst = BSTNode(names_1[0])
+# keep the name1 in birnary and looking for the names2
 for name_1 in names_1:
-    for name_2 in names_2:
-        if name_1 == name_2:
-            duplicates.append(name_1)
+    bst.insert(name_1)
+# if names_2 also have dame element in names_1 binary tree,
+# if so, append them to "duplicates"
+for name_2 in names_2:
+    if bst.contains(name_2):
+        duplicates.append(name_2)
+
 
 end_time = time.time()
+
 print (f"{len(duplicates)} duplicates:\n\n{', '.join(duplicates)}\n\n")
 print (f"runtime: {end_time - start_time} seconds")
 
